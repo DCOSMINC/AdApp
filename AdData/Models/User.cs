@@ -9,6 +9,7 @@ namespace AdData.Models
         public User()
         {
             Ads = new HashSet<Ad>();
+            Comments = new HashSet<Comment>();
         }
 
         [Required]
@@ -27,5 +28,6 @@ namespace AdData.Models
         public string TelephoneNumber { get; set; }
 
         public virtual IEnumerable<Ad> Ads { get; set; }
+        public virtual IEnumerable<Comment> Comments { get; set; }
     }
 }

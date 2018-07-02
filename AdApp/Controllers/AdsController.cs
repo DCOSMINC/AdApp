@@ -38,12 +38,17 @@ namespace AdApp.Controllers
         // GET: Ads/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+           
+            ViewData["Comments"] = new SelectList(_context.Comments);
             if (id == null)
             {
                 return NotFound();
             }
 
             var ad = await _context.Ads
+                .Include(e => e.Category)
+                .Include(e => e.User)
+                .Include(e => e.Comments)
                 .FirstOrDefaultAsync(e => e.Id == id);
             if (ad == null)
             {
@@ -167,6 +172,16 @@ namespace AdApp.Controllers
         private bool AdExists(int id)
         {
             return _context.Ads.Any(e => e.Id == id);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddComment([Bind("Id", "AddedComment", "Ad", "User")] Comment comment)
+        {
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

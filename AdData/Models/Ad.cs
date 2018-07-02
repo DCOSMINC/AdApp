@@ -6,6 +6,10 @@ namespace AdData.Models
 {
     public class Ad
     {
+        public Ad()
+        {
+            Comments = new HashSet<Comment>();
+        }
 
         [Required]
         public int Id { get; set; }
@@ -23,6 +27,8 @@ namespace AdData.Models
         public  User User { get; set; }
         
         public  Category Category { get; set; }
+
+        public IEnumerable<Comment> Comments { get; set; }
 
     }
 }

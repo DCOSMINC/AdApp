@@ -29,7 +29,7 @@ namespace AdData.Migrations
 
                     b.Property<int?>("CategoryId");
 
-                    b.Property<int?>("CategoryIdVal");
+                    b.Property<int>("CategoryIdVal");
 
                     b.Property<string>("Description")
                         .IsRequired();
@@ -41,7 +41,7 @@ namespace AdData.Migrations
 
                     b.Property<int?>("UserId");
 
-                    b.Property<int?>("UserIdVal");
+                    b.Property<int>("UserIdVal");
 
                     b.HasKey("Id");
 
@@ -64,6 +64,27 @@ namespace AdData.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("AdData.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AdId");
+
+                    b.Property<string>("AddedComment");
+
+                    b.Property<int?>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("AdData.Models.User", b =>
@@ -103,6 +124,17 @@ namespace AdData.Migrations
 
                     b.HasOne("AdData.Models.User", "User")
                         .WithMany("Ads")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("AdData.Models.Comment", b =>
+                {
+                    b.HasOne("AdData.Models.Ad", "Ad")
+                        .WithMany("Comments")
+                        .HasForeignKey("AdId");
+
+                    b.HasOne("AdData.Models.User", "User")
+                        .WithMany("Comments")
                         .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618

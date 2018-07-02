@@ -10,6 +10,7 @@ namespace AdData
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Ad> Ads { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
 
         
     }

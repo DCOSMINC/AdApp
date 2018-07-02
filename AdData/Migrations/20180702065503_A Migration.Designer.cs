@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdData.Migrations
 {
     [DbContext(typeof(AdContext))]
-    [Migration("20180701234548_B Migration")]
-    partial class BMigration
+    [Migration("20180702065503_A Migration")]
+    partial class AMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,6 +68,27 @@ namespace AdData.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("AdData.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AdId");
+
+                    b.Property<string>("AddedComment");
+
+                    b.Property<int?>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("AdData.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -105,6 +126,17 @@ namespace AdData.Migrations
 
                     b.HasOne("AdData.Models.User", "User")
                         .WithMany("Ads")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("AdData.Models.Comment", b =>
+                {
+                    b.HasOne("AdData.Models.Ad", "Ad")
+                        .WithMany("Comments")
+                        .HasForeignKey("AdId");
+
+                    b.HasOne("AdData.Models.User", "User")
+                        .WithMany("Comments")
                         .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
