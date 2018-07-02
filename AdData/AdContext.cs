@@ -7,8 +7,10 @@ namespace AdData
     {
         public AdContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Ad> Ads { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Ad> Ads { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+
+        
     }
 }

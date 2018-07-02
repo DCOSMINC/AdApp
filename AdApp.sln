@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdApp", "AdApp\AdApp.csproj", "{90F4DFCA-2121-46B1-A01F-8F787EE3AA81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdData", "AdData\AdData.csproj", "{FAA65618-7CD8-4311-8474-E5F7FD74C54F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdData", "AdData\AdData.csproj", "{FAA65618-7CD8-4311-8474-E5F7FD74C54F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdServices", "AdService\AdServices.csproj", "{C1E77EF8-2473-4C5B-9D44-806B315A7A08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{FAA65618-7CD8-4311-8474-E5F7FD74C54F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAA65618-7CD8-4311-8474-E5F7FD74C54F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAA65618-7CD8-4311-8474-E5F7FD74C54F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1E77EF8-2473-4C5B-9D44-806B315A7A08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1E77EF8-2473-4C5B-9D44-806B315A7A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1E77EF8-2473-4C5B-9D44-806B315A7A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1E77EF8-2473-4C5B-9D44-806B315A7A08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

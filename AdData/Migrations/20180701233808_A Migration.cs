@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AdData.Migrations
 {
-    public partial class Initialmigration : Migration
+    public partial class AMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,7 @@ namespace AdData.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CategoryName = table.Column<string>(nullable: true)
+                    CategoryName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,11 +27,12 @@ namespace AdData.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Username = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    TelephoneNumber = table.Column<string>(nullable: true)
+                    Username = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
+                    TelephoneNumber = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,10 +45,10 @@ namespace AdData.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true),
-                    Content = table.Column<string>(nullable: true),
-                    PostDate = table.Column<DateTime>(nullable: false),
-                    ExpirationDate = table.Column<DateTime>(nullable: false),
+                    Title = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    AddDate = table.Column<DateTime>(nullable: false),
+                    ExpirationDate = table.Column<DateTime>(nullable: true),
                     UserId = table.Column<int>(nullable: true),
                     CategoryId = table.Column<int>(nullable: true)
                 },

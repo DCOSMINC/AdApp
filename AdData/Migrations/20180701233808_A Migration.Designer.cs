@@ -4,14 +4,16 @@ using AdData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdData.Migrations
 {
     [DbContext(typeof(AdContext))]
-    partial class AdContextModelSnapshot : ModelSnapshot
+    [Migration("20180701233808_A Migration")]
+    partial class AMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,8 +31,6 @@ namespace AdData.Migrations
 
                     b.Property<int?>("CategoryId");
 
-                    b.Property<int?>("CategoryIdVal");
-
                     b.Property<string>("Description")
                         .IsRequired();
 
@@ -40,8 +40,6 @@ namespace AdData.Migrations
                         .IsRequired();
 
                     b.Property<int?>("UserId");
-
-                    b.Property<int?>("UserIdVal");
 
                     b.HasKey("Id");
 

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AdData\AdData.csproj" />
+    <ProjectReference Include="..\AdService\AdServices.csproj" />
   </ItemGroup>
 
 </Project>

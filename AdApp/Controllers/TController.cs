@@ -10,11 +10,11 @@ using AdData.Models;
 
 namespace AdApp.Controllers
 {
-    public class AdsController : Controller
+    public class TController : Controller
     {
         private readonly AdContext _context;
 
-        public AdsController(AdContext context)
+        public TController(AdContext context)
         {
             _context = context;
         }
@@ -25,11 +25,11 @@ namespace AdApp.Controllers
             List<Ad> ads = null;
             if (!String.IsNullOrEmpty(searchString))
             {
-                ads =  await (_context.Ads.Include(e => e.Category).Include(e => e.User).Where(e => e.Title.Contains(searchString))).ToListAsync();
+                ads = await (_context.Ads.Where(e => e.Title.Contains(searchString))).ToListAsync();
             }
             else
             {
-                ads = await (_context.Ads.Include(e => e.Category).Include(e => e.User)).ToListAsync();
+                ads = await _context.Ads.ToListAsync();
             }
 
             return View(ads);
@@ -44,7 +44,7 @@ namespace AdApp.Controllers
             }
 
             var ad = await _context.Ads
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (ad == null)
             {
                 return NotFound();
@@ -56,8 +56,6 @@ namespace AdApp.Controllers
         // GET: Ads/Create
         public IActionResult Create()
         {
-            ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Id");
-            ViewData["Users"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -66,21 +64,16 @@ namespace AdApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,AddDate,ExpirationDate,UserIdVal,CategoryIdVal")] Ad ad)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,AddDate,ExpirationDate")] Ad ad)
         {
             if (ModelState.IsValid)
             {
                 ad.AddDate = DateTime.Now;
                 ad.ExpirationDate = ad.AddDate.AddDays(7);
-                ad.User = _context.Users.FirstOrDefault(e => e.Id == ad.UserIdVal);
-                ad.Category = _context.Categories.FirstOrDefault(e => e.Id == ad.CategoryIdVal);
                 _context.Add(ad);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Id", ad.CategoryIdVal);
-            ViewData["Users"] = new SelectList(_context.Users, "Id", "Id", ad.UserIdVal);
             return View(ad);
         }
 
@@ -105,7 +98,7 @@ namespace AdApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,AddDate,ExpirationDate")] Ad ad)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,AddDate,ExpirationDate,CategoryName")] Ad ad)
         {
             if (id != ad.Id)
             {

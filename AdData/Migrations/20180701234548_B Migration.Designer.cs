@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdData.Migrations
 {
     [DbContext(typeof(AdContext))]
-    [Migration("20180627223021_Second Migration")]
-    partial class SecondMigration
+    [Migration("20180701234548_B Migration")]
+    partial class BMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,13 +31,19 @@ namespace AdData.Migrations
 
                     b.Property<int?>("CategoryId");
 
-                    b.Property<string>("Description");
+                    b.Property<int>("CategoryIdVal");
 
-                    b.Property<DateTime>("ExpirationDate");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
-                    b.Property<string>("Title");
+                    b.Property<DateTime?>("ExpirationDate");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<int?>("UserId");
+
+                    b.Property<int>("UserIdVal");
 
                     b.HasKey("Id");
 
@@ -54,7 +60,8 @@ namespace AdData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CategoryName");
+                    b.Property<string>("CategoryName")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -67,17 +74,23 @@ namespace AdData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Password")
+                        .IsRequired();
 
-                    b.Property<string>("TelephoneNumber");
+                    b.Property<string>("TelephoneNumber")
+                        .IsRequired();
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Username")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -87,11 +100,11 @@ namespace AdData.Migrations
             modelBuilder.Entity("AdData.Models.Ad", b =>
                 {
                     b.HasOne("AdData.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Ads")
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("AdData.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Ads")
                         .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
