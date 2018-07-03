@@ -79,7 +79,8 @@ namespace AdData.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AddedComment = table.Column<string>(nullable: true),
                     AdId = table.Column<int>(nullable: true),
-                    UserId = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: true),
+                    AdIdVal = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

@@ -19,22 +19,24 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
+            <th >
+                @*@Html.DisplayNameFor(model => model.Title)*@
+                @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParam})
             </th>
-            <th>
+            <th color="blue">
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddDate)
+                @*@Html.DisplayNameFor(model => model.AddDate)*@
+                @Html.ActionLink("AddDate", "Index", new { sortOrder = ViewBag.DateSortParam})
             </th>
-            <th>
+            <th color="blue">
                 @Html.DisplayNameFor(model => model.ExpirationDate)
             </th>
-            <th>
+            <th color="blue">
                 @Html.DisplayNameFor(model => model.Category)
             </th>
-            <th>
+            <th color="blue">
                 @Html.DisplayNameFor(model => model.User)
             </th>
             <th></th>

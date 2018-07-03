@@ -28,6 +28,8 @@ namespace AdData.Models
         
         public  Category Category { get; set; }
 
+        public string CommentValue { get; set; }
+
         public IEnumerable<Comment> Comments { get; set; }
 
     }

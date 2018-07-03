@@ -20,9 +20,12 @@ namespace AdApp.Controllers
         }
 
         // GET: Ads
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, string sortOrder)
         {
-            List<Ad> ads = null;
+            ViewBag.TitleSortParam = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewBag.DateSortParam = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+
+            IEnumerable<Ad> ads = null;
             if (!String.IsNullOrEmpty(searchString))
             {
                 ads =  await (_context.Ads.Include(e => e.Category).Include(e => e.User).Where(e => e.Title.Contains(searchString))).ToListAsync();
@@ -31,7 +34,21 @@ namespace AdApp.Controllers
             {
                 ads = await (_context.Ads.Include(e => e.Category).Include(e => e.User)).ToListAsync();
             }
-
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    ads = ads.OrderByDescending(e => e.Title);
+                    break;
+                case "date_asc":
+                    ads = ads.OrderBy(e => e.AddDate);
+                    break;
+                case "date_desc":
+                    ads = ads.OrderByDescending(e => e.AddDate);
+                    break;
+                default:
+                    ads = ads.OrderBy(e => e.Title);
+                    break;
+            }
             return View(ads);
         }
 
@@ -61,8 +78,8 @@ namespace AdApp.Controllers
         // GET: Ads/Create
         public IActionResult Create()
         {
-            ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Id");
-            ViewData["Users"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["Categories"] = new SelectList(_context.Categories, "Id", "CategoryName");
+            ViewData["Users"] = new SelectList(_context.Users, "Id", "Username");
             return View();
         }
 
@@ -177,11 +194,23 @@ namespace AdApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddComment([Bind("Id", "AddedComment", "Ad", "User")] Comment comment)
+        public async Task<IActionResult> AddComment([Bind("Id", "CommentValue", "UserIdVal")] Ad ad)
         {
-            _context.Comments.Add(comment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (!String.IsNullOrEmpty(ad.CommentValue))
+            {
+                Comment comment = new Comment();
+
+                comment.AddedComment = ad.CommentValue;
+                comment.Ad = _context.Ads.FirstOrDefault(e => e.Id == ad.Id);
+                comment.User = _context.Users.FirstOrDefault(e => e.Id == ad.UserIdVal);
+                //comment.AdIdVal = comment.Id;
+                _context.Comments.Add(comment);
+                await _context.SaveChangesAsync();
+                //return View(_context.Comments);
+                
+            }
+
+            return RedirectToAction(nameof(Details), "Ads", ad);
         }
     }
 }

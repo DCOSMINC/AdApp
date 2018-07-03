@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdData.Migrations
 {
     [DbContext(typeof(AdContext))]
-    [Migration("20180702065503_A Migration")]
-    partial class AMigration
+    [Migration("20180702152614_B Migration")]
+    partial class BMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,9 +76,13 @@ namespace AdData.Migrations
 
                     b.Property<int?>("AdId");
 
+                    b.Property<int>("AdIdVal");
+
                     b.Property<string>("AddedComment");
 
                     b.Property<int?>("UserId");
+
+                    b.Property<int>("UserIdVal");
 
                     b.HasKey("Id");
 
