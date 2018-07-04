@@ -203,11 +203,8 @@ namespace AdApp.Controllers
                 comment.AddedComment = ad.CommentValue;
                 comment.Ad = _context.Ads.FirstOrDefault(e => e.Id == ad.Id);
                 comment.User = _context.Users.FirstOrDefault(e => e.Id == ad.UserIdVal);
-                //comment.AdIdVal = comment.Id;
                 _context.Comments.Add(comment);
                 await _context.SaveChangesAsync();
-                //return View(_context.Comments);
-                
             }
 
             return RedirectToAction(nameof(Details), "Ads", ad);

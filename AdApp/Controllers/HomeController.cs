@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using AdApp.Models;
 using AdData.Models;
 using AdData;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace AdApp.Controllers
 {
@@ -18,18 +21,46 @@ namespace AdApp.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index([Bind("Id", "Username", "Password", "Email", "FirstName", "LastName", "TelephoneNumber")] User user)
+        {
+
+            User secondUser = _context.Users.FirstOrDefault(e => e.Username == user.Username);
+            if (secondUser != null)
+            {
+                if (secondUser.Password.Equals(user.Password))
+                {
+                    return RedirectToAction(nameof(Index), "Ads");
+                }
+            }
             
             return View();
         }
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
-        public IActionResult Contact([Bind("Id", "Username", "Password", "Email", "FirstName", "LastName", "TelephoneNumber")] User user)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> About([Bind("Id", "Username", "Password", "Email", "FirstName", "LastName", "TelephoneNumber")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                await _context.AddAsync(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+        public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
 
