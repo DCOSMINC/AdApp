@@ -35,6 +35,7 @@ namespace AdApp.Controllers
             {
                 if (secondUser.Password.Equals(user.Password))
                 {
+                    CurrentUser.User = user;
                     return RedirectToAction(nameof(Index), "Ads");
                 }
             }
@@ -51,9 +52,9 @@ namespace AdApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> About([Bind("Id", "Username", "Password", "Email", "FirstName", "LastName", "TelephoneNumber")] User user)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && user != null)
             {
-                await _context.AddAsync(user);
+                await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

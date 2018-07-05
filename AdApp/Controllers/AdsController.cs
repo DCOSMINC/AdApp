@@ -25,6 +25,8 @@ namespace AdApp.Controllers
             ViewBag.TitleSortParam = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewBag.DateSortParam = sortOrder == "date_asc" ? "date_desc" : "date_asc";
 
+            ViewData["CurrentUser"] = CurrentUser.User;
+
             IEnumerable<Ad> ads = null;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -79,7 +81,7 @@ namespace AdApp.Controllers
         public IActionResult Create()
         {
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "CategoryName");
-            ViewData["Users"] = new SelectList(_context.Users, "Id", "Username");
+            //ViewData["Users"] = new SelectList(_context.Users, "Id", "Username");
             return View();
         }
 
@@ -94,7 +96,8 @@ namespace AdApp.Controllers
             {
                 ad.AddDate = DateTime.Now;
                 ad.ExpirationDate = ad.AddDate.AddDays(7);
-                ad.User = _context.Users.FirstOrDefault(e => e.Id == ad.UserIdVal);
+                //ad.User = _context.Users.FirstOrDefault(e => e.Id == ad.UserIdVal);
+                ad.User = _context.Users.FirstOrDefault(e => e.Username == CurrentUser.User.Username);
                 ad.Category = _context.Categories.FirstOrDefault(e => e.Id == ad.CategoryIdVal);
                 _context.Add(ad);
                 await _context.SaveChangesAsync();
@@ -102,7 +105,7 @@ namespace AdApp.Controllers
             }
 
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Id", ad.CategoryIdVal);
-            ViewData["Users"] = new SelectList(_context.Users, "Id", "Id", ad.UserIdVal);
+            //ViewData["Users"] = new SelectList(_context.Users, "Id", "Id", ad.UserIdVal);
             return View(ad);
         }
 
@@ -194,7 +197,7 @@ namespace AdApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddComment([Bind("Id", "CommentValue", "UserIdVal")] Ad ad)
+        public async Task<IActionResult> AddComment([Bind("Id", "CommentValue")] Ad ad)
         {
             if (!String.IsNullOrEmpty(ad.CommentValue))
             {
@@ -202,7 +205,8 @@ namespace AdApp.Controllers
 
                 comment.AddedComment = ad.CommentValue;
                 comment.Ad = _context.Ads.FirstOrDefault(e => e.Id == ad.Id);
-                comment.User = _context.Users.FirstOrDefault(e => e.Id == ad.UserIdVal);
+                comment.User = _context.Users.FirstOrDefault(e => e.Username == CurrentUser.User.Username);
+                //comment.User = CurrentUser.User;
                 _context.Comments.Add(comment);
                 await _context.SaveChangesAsync();
             }
