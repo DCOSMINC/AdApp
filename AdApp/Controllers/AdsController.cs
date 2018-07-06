@@ -20,21 +20,27 @@ namespace AdApp.Controllers
         }
 
         // GET: Ads
-        public async Task<IActionResult> Index(string searchString, string sortOrder)
-        {
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string filterText)
+        {   
+            if(CurrentUser.User == null)
+            {
+                return RedirectToAction(nameof(Index), "Home");
+            }
+
             ViewBag.TitleSortParam = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewBag.DateSortParam = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+            ViewBag.FilterButton = String.IsNullOrEmpty(filterText) ? "ABC" : "";
 
             ViewData["CurrentUser"] = CurrentUser.User;
 
             IEnumerable<Ad> ads = null;
             if (!String.IsNullOrEmpty(searchString))
             {
-                ads =  await (_context.Ads.Include(e => e.Category).Include(e => e.User).Where(e => e.Title.Contains(searchString))).ToListAsync();
+                ads =  await (_context.Ads.Include(e => e.Category).Include(e => e.User).Where(e => e.Title.Contains(searchString) && e.ExpirationDate > DateTime.Now)).ToListAsync();
             }
             else
             {
-                ads = await (_context.Ads.Include(e => e.Category).Include(e => e.User)).ToListAsync();
+                ads = await (_context.Ads.Include(e => e.Category).Include(e => e.User).Where(e => e.ExpirationDate > DateTime.Now)).ToListAsync();
             }
             switch (sortOrder)
             {
@@ -57,7 +63,11 @@ namespace AdApp.Controllers
         // GET: Ads/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-           
+            if (CurrentUser.User == null)
+            {
+                return RedirectToAction(nameof(Index), "Home");
+            }
+
             ViewData["Comments"] = new SelectList(_context.Comments);
             if (id == null)
             {
@@ -68,6 +78,7 @@ namespace AdApp.Controllers
                 .Include(e => e.Category)
                 .Include(e => e.User)
                 .Include(e => e.Comments)
+                .ThenInclude(comment => comment.User)
                 .FirstOrDefaultAsync(e => e.Id == id);
             if (ad == null)
             {
@@ -80,6 +91,11 @@ namespace AdApp.Controllers
         // GET: Ads/Create
         public IActionResult Create()
         {
+            if (CurrentUser.User == null)
+            {
+                return RedirectToAction(nameof(Index), "Home");
+            }
+
             ViewData["Categories"] = new SelectList(_context.Categories, "Id", "CategoryName");
             //ViewData["Users"] = new SelectList(_context.Users, "Id", "Username");
             return View();
@@ -112,6 +128,11 @@ namespace AdApp.Controllers
         // GET: Ads/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (CurrentUser.User == null)
+            {
+                return RedirectToAction(nameof(Index), "Home");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -163,6 +184,11 @@ namespace AdApp.Controllers
         // GET: Ads/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (CurrentUser.User == null)
+            {
+                return RedirectToAction(nameof(Index), "Home");
+            }
+
             if (id == null)
             {
                 return NotFound();

@@ -14,6 +14,8 @@
             Title: <input type="text" name="SearchString">
             <input type="submit" value="Filter" />
         </p>
+        @*<label>@Html.RadioButton("ABC", "Yes", new { filterText = ViewBag.FilterButton }) Yes</label>
+        <label>@Html.RadioButton("ABC", "No", new { filterText = "" }) No</label>*@
     </form>
 
 <table class="table">
@@ -45,7 +47,6 @@
     <tbody>
         @foreach (var item in Model)
         {
-            
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
