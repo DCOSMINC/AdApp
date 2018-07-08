@@ -22,6 +22,8 @@ namespace AdData.Models
 
         public int UserIdVal { get; set; }
         public int CategoryIdVal { get; set; }
+
+        public byte[] Image { get; set; }
         
 
         public  User User { get; set; }

@@ -8,9 +8,11 @@
 
 <h4>Ad</h4>
 <hr />
+
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -35,6 +37,11 @@
             <div class="form-group">
                 <label asp-for="CategoryIdVal" class="control-label"></label>
                 <select asp-for="CategoryIdVal" class="form-control" asp-items="ViewBag.Categories"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" type="file" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             @*<div class="form-group">
                 <label asp-for="UserIdVal" class="control-label"></label>

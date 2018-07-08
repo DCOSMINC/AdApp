@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdData;
 using AdData.Models;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace AdApp.Controllers
 {
@@ -106,10 +108,17 @@ namespace AdApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,AddDate,ExpirationDate,UserIdVal,CategoryIdVal")] Ad ad)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,AddDate,ExpirationDate,UserIdVal,CategoryIdVal")] Ad ad, IFormFile image)
         {
             if (ModelState.IsValid)
             {
+                using(var stream = new MemoryStream())
+                {
+
+                    await image.CopyToAsync(stream);
+                    ad.Image = stream.ToArray();
+                }
+
                 ad.AddDate = DateTime.Now;
                 ad.ExpirationDate = ad.AddDate.AddDays(7);
                 //ad.User = _context.Users.FirstOrDefault(e => e.Id == ad.UserIdVal);
