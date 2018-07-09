@@ -48,9 +48,14 @@ namespace AdApp.Controllers
             return View();
         }
 
+        public IActionResult Register()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> About([Bind("Id", "Username", "Password", "Email", "FirstName", "LastName", "TelephoneNumber")] User user)
+        public async Task<IActionResult> Register([Bind("Id", "Username", "Password", "Email", "FirstName", "LastName", "TelephoneNumber")] User user)
         {
             if (ModelState.IsValid && user != null)
             {
@@ -61,12 +66,12 @@ namespace AdApp.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Logout()
         {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            CurrentUser.User = null;
+            return RedirectToAction(nameof(Index));
         }
+        
 
         public IActionResult Error()
         {

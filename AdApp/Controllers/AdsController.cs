@@ -22,12 +22,11 @@ namespace AdApp.Controllers
         }
 
         // GET: Ads
-        public async Task<IActionResult> Index(string searchString, string sortOrder, string filterText)
-        {   
-            if(CurrentUser.User == null)
-            {
-                return RedirectToAction(nameof(Index), "Home");
-            }
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string filterText, string searchCategory)
+        {
+            ViewData["Categories"] = new SelectList(_context.Categories, "CategoryName", "CategoryName");
+
+            
 
             ViewBag.TitleSortParam = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewBag.DateSortParam = sortOrder == "date_asc" ? "date_desc" : "date_asc";
@@ -38,12 +37,19 @@ namespace AdApp.Controllers
             IEnumerable<Ad> ads = null;
             if (!String.IsNullOrEmpty(searchString))
             {
-                ads =  await (_context.Ads.Include(e => e.Category).Include(e => e.User).Where(e => e.Title.Contains(searchString) && e.ExpirationDate > DateTime.Now)).ToListAsync();
+                ads = await (_context.Ads.Include(e => e.Category).Include(e => e.User).Where(e => (e.Title.Contains(searchString) || e.Description.Contains(searchString)) && e.ExpirationDate > DateTime.Now)).ToListAsync();  
             }
             else
             {
                 ads = await (_context.Ads.Include(e => e.Category).Include(e => e.User).Where(e => e.ExpirationDate > DateTime.Now)).ToListAsync();
             }
+
+            if (!String.IsNullOrEmpty(searchCategory))
+            {
+                ads = ads.Where(e => e.Category.CategoryName.Equals(searchCategory));
+            }
+
+
             switch (sortOrder)
             {
                 case "title_desc":
@@ -65,11 +71,7 @@ namespace AdApp.Controllers
         // GET: Ads/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (CurrentUser.User == null)
-            {
-                return RedirectToAction(nameof(Index), "Home");
-            }
-
+           
             ViewData["Comments"] = new SelectList(_context.Comments);
             if (id == null)
             {
@@ -122,7 +124,10 @@ namespace AdApp.Controllers
                 ad.AddDate = DateTime.Now;
                 ad.ExpirationDate = ad.AddDate.AddDays(7);
                 //ad.User = _context.Users.FirstOrDefault(e => e.Id == ad.UserIdVal);
-                ad.User = _context.Users.FirstOrDefault(e => e.Username == CurrentUser.User.Username);
+                if (CurrentUser.User != null)
+                {
+                    ad.User = _context.Users.FirstOrDefault(e => e.Username == CurrentUser.User.Username);
+                }
                 ad.Category = _context.Categories.FirstOrDefault(e => e.Id == ad.CategoryIdVal);
                 _context.Add(ad);
                 await _context.SaveChangesAsync();
@@ -248,5 +253,12 @@ namespace AdApp.Controllers
 
             return RedirectToAction(nameof(Details), "Ads", ad);
         }
+
+        public IActionResult Logout()
+        {
+            CurrentUser.User = null;
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
     }
 }
