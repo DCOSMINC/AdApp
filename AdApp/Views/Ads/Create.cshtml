@@ -21,7 +21,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <div class="form-group" role="textbox" multiline="true" max-height="1050px" data-role="editable" style="width: 100%; margin-bottom: 5px; margin-top: 8px; overflow: auto">
+                    <textarea id="descriptionTextArea" type="text" asp-for="Description" class="form-control" placeholder="Add a Comment ..." style="display: inline;">
+    
+                    </textarea>
+                </div>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             @*<div class="form-group">
@@ -35,8 +39,8 @@
             <span asp-validation-for="User.Username" class="text-danger"></span>
         </div>*@
             <div class="form-group">
-                <label asp-for="CategoryIdVal" class="control-label"></label>
-                <select asp-for="CategoryIdVal" class="form-control" asp-items="ViewBag.Categories"></select>
+                <label asp-for="CategoryIdVal" class="control-label">Category</label>
+                <select asp-for="CategoryIdVal" class="form-control" asp-items="ViewBag.Categories">Categorie</select>
             </div>
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>

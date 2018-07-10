@@ -32,6 +32,8 @@ namespace AdApp.Controllers
             ViewBag.DateSortParam = sortOrder == "date_asc" ? "date_desc" : "date_asc";
             ViewBag.FilterButton = String.IsNullOrEmpty(filterText) ? "ABC" : "";
 
+            ViewData["Ads"] = _context.Ads;
+
             ViewData["CurrentUser"] = CurrentUser.User;
 
             IEnumerable<Ad> ads = null;
@@ -198,6 +200,8 @@ namespace AdApp.Controllers
         // GET: Ads/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewData["Categories"] = new SelectList(_context.Categories, "CategoryName", "CategoryName");
+
             if (CurrentUser.User == null)
             {
                 return RedirectToAction(nameof(Index), "Home");

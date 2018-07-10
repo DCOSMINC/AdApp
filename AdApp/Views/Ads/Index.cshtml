@@ -3,118 +3,190 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h2>Index</h2>
+@*<div class="container-fluid" style="background-color: #37454d; width: 200%; margin-left: -50%;">
+    <div class="col-md-12" style="margin-left: 25%;">*@
+<h2>Lista Anunturi</h2>
 
 @if (CurrentUser.User != null)
 {
-<a asp-action="Create">Create New</a>
+    <form>
+        <Button asp-action="Create" style="font-size:x-large; border: 1px solid black; background-color:blanchedalmond; padding: 4px; margin-bottom: 10px;">Adauga un nou anunt</Button>
+    </form>
 }
-
-<br>
 <form asp-controller="Ads" asp-action="Index" method="get">
     <p>
-        Search:
-        <select class="selectBox" name="searchCategory" class="form-control" asp-items="ViewBag.Categories"></select>
+        <select class="selectBox" name="searchCategory" asp-items="ViewBag.Categories" style="width: 200px;">
+            <option selected="selected"></option>
+        </select>
         <script type="text/javascript">
             $(".selectBox").chosen();
         </script>
+
+
+
+
         <input type="text" name="SearchString">
         <input type="submit" value="Filter" />
     </p>
+    <div>
+
+        <div style="display: inline-block; margin: 5px;">
+            <p>Sort by: </p>
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParam })
+            @Html.ActionLink("AddDate", "Index", new { sortOrder = ViewBag.DateSortParam })
+        </div>
+    </div>
     @*<label>@Html.RadioButton("ABC", "Yes", new { filterText = ViewBag.FilterButton }) Yes</label>
         <label>@Html.RadioButton("ABC", "No", new { filterText = "" }) No</label>*@
+    @*@Html.DropDownListFor(new SelectList(Model.OrderBy(x => x.AddDate)))*@
+    @*@Html.ListBox(ViewBag.Ads, new SelectList(
+        new List<Object>{
+             new { value = 0 , text = "Title"  },
+             new { value = 1 , text = "Add Date" },
+             new { value = 2 , text = "Expire Date"},
+             new { value = 3 , text = "User" }
+          },
+        "value",
+        "text",
+         2))*@
+
 </form>
+@*</div>
+    </div>*@
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @*@Html.DisplayNameFor(model => model.Title)*@
-                @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParam })
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.AddDate)*@
-                @Html.ActionLink("AddDate", "Index", new { sortOrder = ViewBag.DateSortParam })
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ExpirationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpirationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Username)
-            </td>
-            <td>
-                @{
-                    if (item.Image != null)
-                    {
-                        var base64 = Convert.ToBase64String(item.Image);
-                        var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
-                        <img src="@imgsrc" style="max-width: 100px; max-height: 100px;" />
+
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                    @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParam })
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AddDate)
+                    @Html.ActionLink("AddDate", "Index", new { sortOrder = ViewBag.DateSortParam })
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExpirationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Image)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        #90afc5
+    </table>*@
+
+<div class="container" style="background-color: #c4dfe6">
+    @foreach (var item in Model)
+    {
+        <hr style="width: 100%;" />
+        <div class="row" style="max-height: 6vw;">
+            <div class="col-md-12">
+                <div class="col-md-2">
+                    @{
+                        if (item.Image != null)
+                        {
+                            var base64 = Convert.ToBase64String(item.Image);
+                            var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+                            <div style="margin-bottom: 20px;">
+                                <img src="@imgsrc" style="width: 9vw; height: 9vw;" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="margin-bottom: 20px;">
+                                <img src="~/images/placeholder.jpg" style="width: 9vw; height: 9vw;" />
+                            </div>
+                        }
                     }
-                }
-            </td>
-            @if (CurrentUser.User == null)
-            {
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                </td>
-            }
-            else
-            {
-                @if (ViewBag.CurrentUser.Username.Equals(item.User.Username))
-                {
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    </td>
-                }
-            }
-        </tr>
-        }
-    </tbody>
-</table>
+                </div>
+                <div class="col-md-6">
+                    <h2>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </h2>
+                    <section>
+                        <div class="col-md-12" style="max-height: 4vw; overflow-wrap: break-word; overflow:hidden">
+                            <div>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </div>
+                            @*<div class="show-more">
+                                    <a href="#">Show more</a>
+                                </div>*@
+                        </div>
+                    </section>
+                </div>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-<script src="js/choosen.js"></script>
-<link rel="stylesheet" href="css/style.css">
+                <div class="vertical-divider"></div>
+
+                <div class="col-md-2">
+
+                    <h4>
+                        Adaugat de @Html.DisplayFor(modelItem => item.User.Username)
+                    </h4>
+                    <div>
+                        <p>Data Adaugare: @Html.DisplayFor(modelItem => item.AddDate)</p>
+                        <p>Data Expirare: @Html.DisplayFor(modelItem => item.ExpirationDate)</p>
+                        <p>Categorie: @Html.DisplayFor(modelItem => item.Category.CategoryName)</p>
+                    </div>
+                </div>
+
+                <div class="vertical-divider" style="left: 83%"></div>
+
+                <div class="col-md-2 hidden-sm hidden-xs">
+                    @if (CurrentUser.User == null)
+                    {
+                        <div>
+                            <form>
+                                <button asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; vertical-align: central; margin-top: 50%;">
+                                    Details
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        @if (ViewBag.CurrentUser.Username.Equals(item.User.Username))
+                        {
+                            <div>
+                                @*<ul style="list-style-type: none; bottom: 0; width: 100%;">
+                                        <li style="padding: 10px; width: 100%;">
+                                            <button asp-action="Edit" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%;">Edit</button>
+                                        </li>
+                                        <li style="padding: 10px; width: 100%;">
+                                            <button asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%;">Details</button>
+                                        </li>
+                                        <li style="padding: 10px; width: 100%;">
+                                            <button asp-action="Delete" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%;">Delete</button>
+                                        </li>
+                                    </ul>*@             <form style="margin-top: 30%;">
+                                    <button asp-action="Edit" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; margin-bottom: 10px;">Edit</button>
+                                    <button asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; margin-bottom: 10px;">Details</button>
+                                    <button asp-action="Delete" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; margin-bottom: 10px;">Delete</button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <form>
+                                    <button asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; vertical-align: central; margin-top: 50%;">Details</button>
+                                </form>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
