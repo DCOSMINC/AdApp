@@ -1,16 +1,37 @@
 ﻿@model IEnumerable<AdData.Models.Ad>
 
 @{
+    var titleClass = "";
+    var dateClass = "";
     ViewData["Title"] = "Index";
+    
+        
+        @if (ViewBag.TitleSortParam.Equals(""))
+        {
+            titleClass = "glyphicon glyphicon-triangle-top";
+        }
+        else if (ViewBag.TitleSortParam.Equals("title_desc"))
+        {
+            titleClass = "glyphicon glyphicon-triangle-bottom";
+        }
+        else if (ViewBag.DateSortParam.Equals("date_asc"))
+        {
+            dateClass = "glyphicon glyphicon-triangle-top";
+        }
+        else if (ViewBag.DateSortParam.Equals("date_desc"))
+        {
+            dateClass = "glyphicon glyphicon-triangle-bottom";
+        }
+    
 }
 @*<div class="container-fluid" style="background-color: #37454d; width: 200%; margin-left: -50%;">
-    <div class="col-md-12" style="margin-left: 25%;">*@
+    <div class="col-md-12" style="margin-left: 25%;"> background-color:blanchedalmond*@
 <h2>Lista Anunturi</h2>
 
 @if (CurrentUser.User != null)
 {
     <form>
-        <Button asp-action="Create" style="font-size:x-large; border: 1px solid black; background-color:blanchedalmond; padding: 4px; margin-bottom: 10px;">Adauga un nou anunt</Button>
+        <Button class="btn btn-primary" asp-action="Create" style="font-size:x-large; border: 1px solid black; padding: 4px; margin-bottom: 10px;">Adauga un nou anunt</Button>
     </form>
 }
 <form asp-controller="Ads" asp-action="Index" method="get">
@@ -32,10 +53,17 @@
 
         <div style="display: inline-block; margin: 5px;">
             <p>Sort by: </p>
+
             @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParam })
+            <i class ="titleClass"></i>
+
+
             @Html.ActionLink("AddDate", "Index", new { sortOrder = ViewBag.DateSortParam })
+            <i class="dateClass"></i>
+
         </div>
     </div>
+
     @*<label>@Html.RadioButton("ABC", "Yes", new { filterText = ViewBag.FilterButton }) Yes</label>
         <label>@Html.RadioButton("ABC", "No", new { filterText = "" }) No</label>*@
     @*@Html.DropDownListFor(new SelectList(Model.OrderBy(x => x.AddDate)))*@
@@ -100,13 +128,13 @@
                             var base64 = Convert.ToBase64String(item.Image);
                             var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
                             <div style="margin-bottom: 20px;">
-                                <img src="@imgsrc" style="width: 9vw; height: 9vw;" />
+                                <img asp-action="Details" asp-route-id="@item.Id" src="@imgsrc" style="width: 9vw; height: 9vw;" />
                             </div>
                         }
                         else
                         {
                             <div style="margin-bottom: 20px;">
-                                <img src="~/images/placeholder.jpg" style="width: 9vw; height: 9vw;" />
+                                <img asp-action="Details" asp-route-id="@item.Id" src="~/images/placeholder.jpg" style="width: 9vw; height: 9vw;" />
                             </div>
                         }
                     }
@@ -148,7 +176,7 @@
                     {
                         <div>
                             <form>
-                                <button asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; vertical-align: central; margin-top: 50%;">
+                                <button class="btn btn-info" asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; width: 100%; vertical-align: central; margin-top: 50%;">
                                     Details
                                 </button>
                             </form>
@@ -169,10 +197,11 @@
                                         <li style="padding: 10px; width: 100%;">
                                             <button asp-action="Delete" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%;">Delete</button>
                                         </li>
-                                    </ul>*@             <form style="margin-top: 30%;">
-                                    <button asp-action="Edit" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; margin-bottom: 10px;">Edit</button>
-                                    <button asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; margin-bottom: 10px;">Details</button>
-                                    <button asp-action="Delete" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; margin-bottom: 10px;">Delete</button>
+                                    </ul>*@             
+                                <form style="margin-top: 30%;">
+                                    <button class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id" style="border: 1px solid black;  width: 100%; margin-bottom: 10px;">Edit</button>
+                                    <button class="btn btn-info" asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; width: 100%; margin-bottom: 10px;">Details</button>
+                                    <button class="btn btn-info" asp-action="Delete" asp-route-id="@item.Id" style="border: 1px solid black;  width: 100%; margin-bottom: 10px;">Delete</button>
                                 </form>
                             </div>
                         }
@@ -180,7 +209,7 @@
                         {
                             <div>
                                 <form>
-                                    <button asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; background-color:aqua; width: 100%; vertical-align: central; margin-top: 50%;">Details</button>
+                                    <button class="btn btn-info" asp-action="Details" asp-route-id="@item.Id" style="border: 1px solid black; width: 100%; vertical-align: central; margin-top: 50%;">Details</button>
                                 </form>
                             </div>
                         }

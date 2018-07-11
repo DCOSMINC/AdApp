@@ -34,8 +34,15 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Login</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Register">Register</a></li>*@
+        <li><a asp-area="" asp-controller="Home" asp-action="Register">Register</a></li>*@
                     <li><a asp-area="" asp-controller="Ads" asp-action="Index">Ads</a></li>
+                    @if (CurrentUser.User != null)
+                    {
+                        @if (CurrentUser.User.Username.Equals("admin"))
+                        {
+                    <li><a asp-area="" asp-controller="Categories" asp-action="Index">Categories</a></li>
+                        }
+                    }
                 </ul>
                 <partial name="PartialLogin" />
             </div>
